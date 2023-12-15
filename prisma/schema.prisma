@@ -10,7 +10,7 @@ datasource db {
 model Cart {
   id         Int       @id @default(autoincrement())
   createdAt  DateTime  @default(now())
-  updatedAt  DateTime
+  updatedAt  DateTime  @default(now())
   clientName String    @db.VarChar(255)
   amount     Float     @default(0)
   amountUSD  Float     @default(0)
@@ -25,7 +25,7 @@ model Cart {
 model Product {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime @default(now())
   name        String   @db.VarChar(255)
   description String?  @db.VarChar(255)
   price       Float    @default(0)
