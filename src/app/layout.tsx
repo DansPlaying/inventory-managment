@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import SideNav from '@/ui/components/sidenav'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,8 +17,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-light dark:bg-dark text-dark  dark:text-primary`}>
-        {children}
+      <body className={`${inter.className} h-screen p-4 bg-light flex dark:bg-black text-black  dark:text-primary`}>
+        <div className='bg-gray-300 dark:bg-dark rounded-3xl h-full w-full overflow-hidden relative'>
+          <div className='border rounded absolute blur-3xl w-[118px] h-[102px] bg-radial-gradient-blue top-[-59px] left-[-51px]'></div>
+          <div className='border rounded absolute blur-3xl w-[118px] h-[102px] bg-radial-gradient-yellow bottom-[-59px] left-[-51px]'></div>
+          <div className='grid grid-cols-main-layout h-full'> 
+              <SideNav />
+            <div>
+              {children}
+            </div>
+          </div>
+        </div>
       </body>
     </html>
   )

@@ -19,6 +19,16 @@ const config: Config = {
         light: "#FFFFFF",
         // You can add more colors as needed
       },
+      backgroundImage:{
+        'radial-gradient-blue': 'radial-gradient(rgba(27, 175, 170, .8), rgba(27, 175, 170, 0))',
+        'radial-gradient-yellow': 'radial-gradient(rgba(175,98, 27, .8), rgba(175,98, 27, .8))'
+      },
+      gridTemplateColumns: {
+        // Complex site-specific row configuration
+        //'layout': '200px minmax(900px, 1fr) 100px',
+        'main-layout' : '80px 1fr'
+      }
+
     },
   },
   plugins: [],
