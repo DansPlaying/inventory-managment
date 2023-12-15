@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CiBoxList, CiHome, CiShoppingCart } from "react-icons/ci";
+import clsx from 'clsx';
 
 const links = [
   {
@@ -22,7 +23,7 @@ const links = [
 ];
 
 export default function SideNav() {
-  // const pathName = usePathname()
+  const pathName = usePathname()
   return (
     <nav className="flex items-center justify-center py-6">
       <ul className="flex flex-col gap-11 items-center">
@@ -33,7 +34,14 @@ export default function SideNav() {
                 <Link
                   key={link.title}
                   href={link.href}
-                  className="block text-light text-2xl"
+                  className={
+                    clsx("block text-2xl p-3 rounded-lg transition-colors", {
+                      'text-accentPrimary bg-accentSecondary': pathName === link.href,
+                    }, {
+                      'hover:scale-125': pathName !== link.href,
+                    }
+                    )
+                  }
                 >
                   {link.icon}
                 </Link>

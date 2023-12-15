@@ -23,9 +23,7 @@ export default function RootLayout({
           <div className='border rounded absolute blur-3xl w-[118px] h-[102px] bg-radial-gradient-yellow bottom-[-59px] left-[-51px]'></div>
           <div className='grid grid-cols-main-layout h-full'>
             <SideNav />
-            <div>
-              {children}
-            </div>
+            {children}
           </div>
         </div>
       </body>
