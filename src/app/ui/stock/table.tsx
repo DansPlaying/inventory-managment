@@ -2,49 +2,6 @@ import { formatCurrency, formatDateToLocal } from '@/app/lib/utils';
 import { UpdateProduct } from './buttons';
 import { fetchFilteredStock } from '@/app/lib/stock/data';
 
-const products = [
-  {
-    id: '1',
-    name: 'Papa',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    description: 'papitas rufles',
-    price: 100,
-    stock: 10,
-    category: 'food',
-  },
-  {
-    id: '2',
-    name: 'Harina',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    description: 'harina pan',
-    price: 200,
-    stock: 10,
-    category: 'food',
-  },
-  {
-    id: '3',
-    name: 'Tomate',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    description: 'tomate rojo',
-    price: 50,
-    stock: 10,
-    category: 'food',
-  },
-  {
-    id: '4',
-    name: 'Cebolla',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    description: 'cebolla de cabeza',
-    price: 100,
-    stock: 10,
-    category: 'food',
-  },
-];
-
 export default async function StockTable({
   query,
   currentPage,
