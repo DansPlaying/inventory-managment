@@ -1,7 +1,11 @@
+import BalanceCardList from "./ui/home/balance-card-list";
+import Statistics from "./ui/home/stadistics";
+
 export default function Home() {
   return (
-    <main>
-      Inventory Dasboard 2.0
-    </main>
+    <div className="pt-4 w-full">
+      <BalanceCardList />
+      <Statistics/>
+    </div>
   )
 }
