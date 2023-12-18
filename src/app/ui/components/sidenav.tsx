@@ -35,8 +35,8 @@ export default function SideNav() {
                   key={link.title}
                   href={link.href}
                   className={
-                    clsx("block text-2xl p-3 rounded-lg transition-colors", {
-                      'text-accentPrimary bg-accentSecondary': pathName === link.href,
+                    clsx("block text-2xl p-3 rounded-lg transition-colors group relative", {
+                      'text-accentPrimary bg-accentSecondary hover:scale-100': pathName === link.href,
                     }, {
                       'hover:scale-125': pathName !== link.href,
                     }
@@ -44,6 +44,11 @@ export default function SideNav() {
                   }
                 >
                   {link.icon}
+                  <div className={clsx("opacity-0 invisible bg-gray-600 text-white text-sm rounded p-2 absolute top-1/2 left-full ml-2 transform -translate-y-1/2 transition-opacity duration-300 group-hover:opacity-100 group-hover:visible", {
+                    "scale-75 left-2/3": pathName !== link.href
+                  })}>
+                    {link.title}
+                  </div>
                 </Link>
               </li>
             );
