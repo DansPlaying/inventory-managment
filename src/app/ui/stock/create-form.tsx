@@ -1,5 +1,6 @@
 'use client'
 
+import type * as Prisma from '@prisma/client';
 import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import { CiApple, CiBadgeDollar, CiCalculator1, CiShoppingTag, CiTextAlignJustify } from 'react-icons/ci';
@@ -7,7 +8,7 @@ import { CiApple, CiBadgeDollar, CiCalculator1, CiShoppingTag, CiTextAlignJustif
 import { Button } from '../components/button';
 import { State, createProduct } from '@/app/lib/stock/actions';
 
-export default function Form({ categories }: { categories: string[] }) {
+export default function Form({ categories }: { categories: Prisma.ProductCategory[] }) {
   const initialState: State = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createProduct, initialState)
   return (
@@ -152,7 +153,7 @@ export default function Form({ categories }: { categories: string[] }) {
           <div className="relative">
             <select
               id="category"
-              name="category"
+              name="categoryId"
               className="dark:bg-dark peer block w-full cursor-pointer rounded-md border py-2 pl-10"
               defaultValue=""
               aria-describedby="category-error"
@@ -161,8 +162,8 @@ export default function Form({ categories }: { categories: string[] }) {
                 Select a category
               </option>
               {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+                <option key={category.id} value={category.id}>
+                  {category.name}
                 </option>
               ))}
             </select>
@@ -170,8 +171,8 @@ export default function Form({ categories }: { categories: string[] }) {
           </div>
         </div>
         <div id="category-error" aria-live="polite" aria-atomic="true">
-          {state.errors?.category &&
-            state.errors.category.map((error: string) => (
+          {state.errors?.categoryId &&
+            state.errors.categoryId.map((error: string) => (
               <p className="mt-2 text-sm text-red-500" key={error}>
                 {error}
               </p>

@@ -100,7 +100,7 @@ export default async function StockTable({
                     {/* {product.updatedAt} */}
                   </td>
                   <td className="whitespace-nowrap px-3 py-2">
-                    {product.category}
+                    {product.category?.name || null}
                   </td>
                   <td className="whitespace-nowrap px-3 py-2">
                     <div className="flex justify-end gap-3">

@@ -12,15 +12,11 @@ const FormSchema = z.object({
   updatedAt: z.date(),
   name: z.string({
     invalid_type_error: 'Please enter a name.',
-  }).regex(/^[a-zA-Z ]+$/, {
-    message: 'Only letters accepted'
   }).min(1, {
     message: 'Can no be empty'
   }),
   description: z.string({
     invalid_type_error: 'Please enter a description.',
-  }).regex(/^[a-zA-Z ]+$/, {
-    message: 'Only letters accepted'
   }).min(1, {
     message: 'Can no be empty'
   }),
@@ -28,7 +24,7 @@ const FormSchema = z.object({
     .number()
     .gt(0, { message: 'Please enter an amount greater than $0.' }),
   stock: z.coerce.number().gte(0),
-  category: z.string().min(1).optional(),
+  categoryId: z.coerce.number().optional(),
   image: z.string().min(1).optional(),
 });
 
@@ -42,7 +38,7 @@ export type State = {
     description?: string[];
     price?: string[];
     stock?: string[];
-    category?: string[];
+    categoryId?: string[];
   };
   message?: string | null;
 };
@@ -53,7 +49,7 @@ export const createProduct = async (prevState: State, formData: FormData) => {
     description: formData.get('description'),
     price: formData.get('price'),
     stock: formData.get('stock'),
-    category: formData.get('category'),
+    categoryId: formData.get('categoryId'),
   });
 
   if (!validatedFields.success) {
@@ -64,7 +60,7 @@ export const createProduct = async (prevState: State, formData: FormData) => {
   }
 
   // Prepare data for insertion into the database
-  const { name,  description, price, stock, category } = validatedFields.data;
+  const { name,  description, price, stock, categoryId } = validatedFields.data;
   const amountInCents = price * 100;
  
   try {
@@ -74,7 +70,7 @@ export const createProduct = async (prevState: State, formData: FormData) => {
         description,
         price: amountInCents,
         stock,
-        category,
+        productCategoryId: categoryId,
       }
     })   
   } catch (error) {

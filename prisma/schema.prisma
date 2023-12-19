@@ -23,15 +23,22 @@ model Cart {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-  name        String   @db.VarChar(255)
-  description String?  @db.VarChar(255)
-  price       Float    @default(0)
-  stock       Int      @default(0)
-  category    String?
-  image       String?
-  cartId      Int?
-  Cart        Cart?    @relation(fields: [cartId], references: [id])
+  id                Int              @id @default(autoincrement())
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @default(now())
+  name              String           @db.VarChar(255)
+  description       String?          @db.VarChar(255)
+  price             Float            @default(0)
+  stock             Int              @default(0)
+  category          ProductCategory? @relation(fields: [productCategoryId], references: [id])
+  image             String?
+  cartId            Int?
+  Cart              Cart?            @relation(fields: [cartId], references: [id])
+  productCategoryId Int?
+}
+
+model ProductCategory {
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(255)
+  products Product[]
 }

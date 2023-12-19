@@ -1,13 +1,14 @@
 import { Metadata } from 'next';
 
 import Form from '@/app/ui/stock/create-form';
+import { fetchCategories } from '@/app/lib/stock/data';
 
 export const metadata: Metadata = {
   title: 'Product Create',
 };
 
 export default async function Page() {
-  // const categories = await fetchCategories();
+  const categories = await fetchCategories();
 
   return (
     <main className='flex flex-col items-center py-6 px-6 gap-4'>
@@ -26,7 +27,7 @@ export default async function Page() {
           },
         ]}
       /> */}
-      <Form categories={['food', 'cleaning', 'drugs']} />
+      <Form categories={categories} />
     </main>
   );
 }
