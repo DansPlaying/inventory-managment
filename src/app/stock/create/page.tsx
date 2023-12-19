@@ -1,29 +1,32 @@
-// import Form from '@/app/ui/invoices/create-form';
-// import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
-// import { fetchCustomers } from '@/app/lib/data';
 import { Metadata } from 'next';
+
+import Form from '@/app/ui/stock/create-form';
 
 export const metadata: Metadata = {
   title: 'Product Create',
 };
 
 export default async function Page() {
-  // const customers = await fetchCustomers();
+  // const categories = await fetchCategories();
 
   return (
-    <main>
-      <h1>Create Product</h1>
+    <main className='flex flex-col items-center py-6 px-6 gap-4'>
+      <div className='flex flex-col items-center gap-4 w-full'>
+        <h1 className='text-3xl'>Create Product</h1>
+        <hr className='w-full' />
+      </div>
+
       {/* <Breadcrumbs
         breadcrumbs={[
-          { label: 'Invoices', href: '/dashboard/invoices' },
+          { label: 'Stock', href: '/stock' },
           {
-            label: 'Create Invoice',
-            href: '/dashboard/invoices/create',
+            label: 'Create Product',
+            href: '/stock/create',
             active: true,
           },
         ]}
-      />
-      <Form customers={customers} /> */}
+      /> */}
+      <Form categories={['food', 'cleaning', 'drugs']} />
     </main>
   );
 }
