@@ -23,7 +23,7 @@ export default async function Page({
   const totalPages = await fetchStockPages(query)
 
   return (
-    <section className='flex flex-col items-center py-6 px-6 gap-4'>
+    <main className='flex flex-col items-center py-6 px-6 gap-4'>
       <div className='flex flex-col items-center gap-4 w-full'>
         <h3 className='text-3xl'>In Stock</h3>
         <hr className='w-full' />
@@ -42,6 +42,6 @@ export default async function Page({
       <div>
         <Pagination totalPages={totalPages} />
       </div>
-    </section>
+    </main>
   )
 }
