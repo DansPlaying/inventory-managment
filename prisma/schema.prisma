@@ -30,11 +30,11 @@ model Product {
   description       String?          @db.VarChar(255)
   price             Float            @default(0)
   stock             Int              @default(0)
-  category          ProductCategory? @relation(fields: [productCategoryId], references: [id])
   image             String?
   cartId            Int?
-  Cart              Cart?            @relation(fields: [cartId], references: [id])
   productCategoryId Int?
+  Cart              Cart?            @relation(fields: [cartId], references: [id])
+  category          ProductCategory? @relation(fields: [productCategoryId], references: [id])
 }
 
 model ProductCategory {

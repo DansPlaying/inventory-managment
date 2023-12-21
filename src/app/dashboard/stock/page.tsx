@@ -1,11 +1,11 @@
+import { fetchStockPages } from '@/app/lib/stock/data';
+import Search from '@/app/ui/components/search';
+import { CreateProduct } from '@/app/ui/stock/buttons';
+import Pagination from '@/app/ui/stock/pagination';
+import StockTable from '@/app/ui/stock/table';
 import { Metadata } from 'next'
 import { Suspense } from 'react';
 
-import Search from '../ui/components/search'
-import StockTable from '../ui/stock/table';
-import Pagination from '../ui/stock/pagination';
-import { fetchStockPages } from '../lib/stock/data';
-import { CreateProduct } from '../ui/stock/buttons';
 
 export const metadata: Metadata = {
   title: 'Stock',

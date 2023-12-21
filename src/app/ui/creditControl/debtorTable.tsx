@@ -1,16 +1,48 @@
 import { formatCurrency, formatDateToLocal } from '@/app/lib/utils';
-import { UpdateProduct } from './buttons';
 import { fetchFilteredStock } from '@/app/lib/stock/data';
 
-export default async function StockTable({
-  query,
-  currentPage,
+const products = [
+  {
+      "id": 1,
+      "name": "Producto 1",
+      "createdAt": "2023-12-15",
+      "price": 10
+  },
+  {
+      "id": 2,
+      "name": "Producto 2",
+      "createdAt": "2023-12-16",
+      "price": 15
+  },
+  {
+      "id": 3,
+      "name": "Producto 3",
+      "createdAt": "2023-12-17",
+      "price": 20
+  },
+  {
+      "id": 4,
+      "name": "Producto 4",
+      "createdAt": "2023-12-18",
+      "price": 12
+  },
+  {
+      "id": 5,
+      "name": "Producto 5",
+      "createdAt": "2023-12-19",
+      "price": 8
+  }
+]
+
+export default async function DebtorTable({
+  // query,
+  // currentPage,
 }: {
-  query: string;
-  currentPage: number;
+  // query: string;
+  // currentPage: number;
 }) {
-  const products = await fetchFilteredStock(query, currentPage);
-  if (!products.length) return (<h3>No products found</h3>)
+ // const products = await fetchFilteredStock(query, currentPage);
+  //if (!products.length) return (<h3>No products found</h3>)
   return (
     <div className="flow-root">
       <div className="inline-block min-w-full align-middle">
@@ -28,12 +60,12 @@ export default async function StockTable({
                     <p className="text-xl font-medium">
                       {formatCurrency(product.price)}
                     </p>
-                    <p>Stock {product.stock}</p>
-                    <p>Last purchase {formatDateToLocal(product.updatedAt)}</p>
+                    {/* <p>Stock {product.stock}</p> */}
+                    <p>Last purchase {product.createdAt}</p>
                   </div>
-                  <div className="flex justify-end gap-2">
-                    <UpdateProduct id={`${product.id}`} />
-                  </div>
+                  {/* <div className="flex justify-end gap-2">
+                    <UpdateProduct id={product.id} />
+                  </div> */}
                 </div>
               </div>
             ))}
@@ -56,9 +88,9 @@ export default async function StockTable({
                 <th scope="col" className="px-3 py-5 font-medium">
                   Last purchase
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                {/* <th scope="col" className="px-3 py-5 font-medium">
                   Category
-                </th>
+                </th> */}
                 {/* <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th> */}
@@ -68,6 +100,7 @@ export default async function StockTable({
               {products?.map((product) => (
                 <tr
                   key={product.id}
+                  // className="w-full border-b py-6 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                   className="w-full border-b text-sm last-of-type:border-none"
                 >
                   {/* <td className="whitespace-nowrap py-3 pl-6 pr-3">
@@ -91,21 +124,31 @@ export default async function StockTable({
                   <td className="whitespace-nowrap px-3 py-2">
                     {formatCurrency(product.price)}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-2">
+                  {/* <td className="whitespace-nowrap px-3 py-2">
                     {product.stock}
-                  </td>
+                  </td> */}
                   <td className="whitespace-nowrap px-3 py-2">
-                    {formatDateToLocal(product.updatedAt)}
+                    {product.createdAt}
                     {/* {product.updatedAt} */}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-2">
-                    {product.category?.name || null}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-2">
+                  {/* <td className="whitespace-nowrap px-3 py-2">
+                    {product.category}
+                  </td> */}
+                  {/* <td className="whitespace-nowrap px-3 py-2">
                     <div className="flex justify-end gap-3">
-                      <UpdateProduct id={`${product.id}`} />
+                      <UpdateProduct id={product.id} />
                     </div>
+                  </td> */}
+
+                  {/* <td className="whitespace-nowrap px-3 py-3">
+                    <InvoiceStatus status={product.status} />
                   </td>
+                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                    <div className="flex justify-end gap-3">
+                      <UpdateInvoice id={product.id} />
+                      <DeleteInvoice id={product.id} />
+                    </div>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
@@ -115,3 +158,5 @@ export default async function StockTable({
     </div>
   );
 }
+
+

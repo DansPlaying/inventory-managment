@@ -12,12 +12,12 @@ const links = [
   },
   {
     title: 'Inventario',
-    href: '/stock',
+    href: '/dashboard/stock',
     icon: <CiBoxList />,
   },
   {
     title: 'Crédito',
-    href: '/creditControl',
+    href: '/dashboard/creditControl',
     icon: <CiShoppingCart />,
   },
 ];

@@ -41,3 +41,11 @@ export const fetchCategories = async () => {
     },
   })
 }
+
+export const fetchProductById = async (productId: string) => {
+  return prisma.product.findUnique({
+    where: {
+      id: parseInt(productId),
+    },
+  });
+}

@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import Form from '@/app/ui/stock/create-form';
+import CreateForm from '@/app/ui/stock/create-form';
 import { fetchCategories } from '@/app/lib/stock/data';
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default async function Page() {
           },
         ]}
       /> */}
-      <Form categories={categories} />
+      <CreateForm categories={categories} />
     </main>
   );
 }

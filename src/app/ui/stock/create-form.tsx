@@ -8,7 +8,7 @@ import { CiApple, CiBadgeDollar, CiCalculator1, CiShoppingTag, CiTextAlignJustif
 import { Button } from '../components/button';
 import { State, createProduct } from '@/app/lib/stock/actions';
 
-export default function Form({ categories }: { categories: Prisma.ProductCategory[] }) {
+export default function CreateForm({ categories }: { categories: Prisma.ProductCategory[] }) {
   const initialState: State = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createProduct, initialState)
   return (
@@ -24,10 +24,11 @@ export default function Form({ categories }: { categories: Prisma.ProductCategor
               <input
                 id="name"
                 name="name"
-                type="text"
+        
                 placeholder="Potato, Tomato, Rice..."
                 className="
-                peerblock
+                peer
+                block
                 w-full
                 rounded-md
                 py-2 pl-10
@@ -60,10 +61,11 @@ export default function Form({ categories }: { categories: Prisma.ProductCategor
               <input
                 id="description"
                 name="description"
-                type="text"
-                placeholder="Deliciuos potato..."
+          
+                placeholder="Delicious potato..."
                 className="
-                peerblock
+                peer
+                block
                 w-full
                 rounded-md
                 py-2 pl-10
@@ -181,7 +183,7 @@ export default function Form({ categories }: { categories: Prisma.ProductCategor
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/stock"
+          href="/dashboard/stock"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancel

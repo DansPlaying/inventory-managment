@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from 'next/navigation';
-import { z } from "zod";
+import { date, z } from "zod";
 
 import { prisma } from "@/app/services/db";
 
@@ -30,7 +30,7 @@ const FormSchema = z.object({
 
 const CreateProduct = FormSchema.omit({ id: true, createdAt: true, updatedAt: true });
 
-const UpdateProduct = FormSchema.omit({ id: true, createdAt: true, updatedAt: true });
+const UpdateProduct = FormSchema.omit({ id: true, createdAt: true, updatedAt: true, name: true });
 
 export type State = {
   errors?: {
@@ -44,7 +44,7 @@ export type State = {
 };
 
 export const createProduct = async (prevState: State, formData: FormData) => {
-  const validatedFields  = CreateProduct.safeParse({
+  const validatedFields = CreateProduct.safeParse({
     name: formData.get('name'),
     description: formData.get('description'),
     price: formData.get('price'),
@@ -60,9 +60,8 @@ export const createProduct = async (prevState: State, formData: FormData) => {
   }
 
   // Prepare data for insertion into the database
-  const { name,  description, price, stock, categoryId } = validatedFields.data;
+  const { name, description, price, stock, categoryId } = validatedFields.data;
   const amountInCents = price * 100;
- 
   try {
     await prisma.product.create({
       data: {
@@ -71,14 +70,58 @@ export const createProduct = async (prevState: State, formData: FormData) => {
         price: amountInCents,
         stock,
         productCategoryId: categoryId,
+
       }
-    })   
+    })
   } catch (error) {
     return {
       message: 'Database Error: Failed to Create Invoice.',
     };
   }
 
-  revalidatePath('/stock');
-  redirect('/stock');
+  revalidatePath('/dashboard/stock');
+  redirect('/dashboard/stock');
+}
+
+export async function updateProduct(
+  id: number,
+  prevState: State,
+  formData: FormData,
+) {
+  const validatedFields = UpdateProduct.safeParse({
+    description: formData.get('description'),
+    price: formData.get('price'),
+    stock: formData.get('stock'),
+  });
+
+  console.log(validatedFields)
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Update Invoice.',
+    };
+  }
+
+  const {price, description, stock } = validatedFields.data;
+  const amountInCents = price * 100;
+  const date = new Date()
+  console.log(date)
+  try {
+    await prisma.product.update({
+      where: {
+        id: id,
+      },
+      data: {
+        stock,
+        description,
+        price: amountInCents,
+        createdAt: date
+      },
+    });
+  } catch (error) {
+    return { message: 'Database Error: Failed to Update Product.' };
+  }
+
+  revalidatePath('/dashboard/stock');
+  redirect('/dashboard/stock');
 }

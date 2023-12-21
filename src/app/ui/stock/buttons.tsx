@@ -4,7 +4,7 @@ import { CiCirclePlus, CiEdit } from "react-icons/ci";
 export function CreateProduct() {
   return (
     <Link
-      href="/stock/create"
+      href="/dashboard/stock/create"
       className="
       fixed bottom-6 right-6 md:static
       flex
@@ -24,7 +24,7 @@ export function CreateProduct() {
 export function UpdateProduct({ id }: { id: string }) {
   return (
     <Link
-      href={`/stock/${id}/edit`}
+      href={`/dashboard/stock/${id}/edit`}
       className="text-2xl rounded-md border dark:border-accentPrimary p-2 dark:hover:bg-accentPrimary"
     >
       <CiEdit />
