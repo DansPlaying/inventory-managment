@@ -20,7 +20,8 @@ export default async function StockTable({
               <div
                 key={product.id}
                 className="mb-2 w-full rounded-md p-4 border">
-                <div className="flex items-center justify-between pb-4">
+                <div className="flex items-center gap-4 pb-4">
+                  <UpdateProduct id={`${product.id}`} />
                   <h3 className="text-2xl">{product.name}</h3>
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
@@ -31,9 +32,9 @@ export default async function StockTable({
                     <p>Stock {product.stock}</p>
                     <p>Last purchase {formatDateToLocal(product.updatedAt)}</p>
                   </div>
-                  <div className="flex justify-end gap-2">
+                  {/* <div className="flex justify-end gap-2">
                     <UpdateProduct id={`${product.id}`} />
-                  </div>
+                  </div> */}
                 </div>
               </div>
             ))}
