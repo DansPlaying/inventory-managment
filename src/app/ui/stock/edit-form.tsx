@@ -1,19 +1,21 @@
 'use client';
 import { IoLogoUsd } from "react-icons/io";
-import { Product } from '@prisma/client';
+import type * as Prisma from '@prisma/client';
+
 import Link from 'next/link';
 // import { Button } from '@/app/ui/button';
 // import { updateInvoice } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { updateProduct } from "@/app/lib/stock/actions";
 import { useState } from "react";
-
+import { CiApple, CiBadgeDollar, CiCalculator1, CiShoppingTag, CiTextAlignJustify } from 'react-icons/ci';
 
 export default function EditProductForm({
-  product
+  product,
+  categories
 }: {
-  product: Product
-
+  product: Prisma.Product
+  categories: Prisma.ProductCategory[]
 }) {
   const initialState = { message: '', errors: {} };
   const [isLoading, setIsLoading] = useState(false)
@@ -26,24 +28,10 @@ export default function EditProductForm({
     }
   }
   return (
-    <form action={dispatch} className=' pr-[4%] flex-col justify-center items-center align-middle'>
-      <div className="rounded-md  bg-transparent border border-white p-2 md:p-4">
+    <form action={dispatch} className='w-full'>
+      <div className="rounded-md border p-4 md:p-6">
 
-        <div className="mb-4">
-          <label htmlFor="name" className="mb-2 block text-sm font-medium">
-            Name
-          </label>
-          <div className="relative">
-            <input
-              id="name"
-              name="name"
-              defaultValue={product.name}
-              placeholder="Enter product name"
-              className="peer block w-full rounded-md border bg-transparent py-2 pl-6 text-sm outline-2 placeholder:text-gray-500"
-            />
-          </div>
-        </div>
-
+        {/* Product Description */}
         <div className="mb-4">
           <label htmlFor="description" className="mb-2 block text-sm font-medium">
             Description
@@ -53,12 +41,31 @@ export default function EditProductForm({
               id="description"
               name="description"
               defaultValue={product.description ?? ''}
-              placeholder="Delicious..."
-              className="peer block w-full rounded-md border bg-transparent py-2 pl-6 text-sm outline-2 placeholder:text-gray-500"
+              placeholder="Delicious potato..."
+              className="
+              peer
+              block
+              w-full
+              rounded-md
+              py-2 pl-10
+              border
+              dark:bg-dark
+              "
+              aria-describedby="description-error"
             />
+            <CiTextAlignJustify className="text-2xl absolute left-3 top-1/2 -translate-y-1/2" />
           </div>
         </div>
+        <div id="description-error" aria-live="polite" aria-atomic="true">
+          {state.errors?.description &&
+            state.errors.description.map((error: string) => (
+              <p className="mt-2 text-sm text-red-500" key={error}>
+                {error}
+              </p>
+            ))}
+        </div>
 
+        {/* Product Price */}
         <div className="mb-4">
           <label htmlFor="price" className="mb-2 block text-sm font-medium">
             Price
@@ -70,15 +77,27 @@ export default function EditProductForm({
                 name="price"
                 type="number"
                 step="0.01"
-                defaultValue={product.price}
+                defaultValue={product.price/100}
                 placeholder="Enter USD amount"
-                className="peer block w-full rounded-md border bg-transparent border-gray-200 py-2 pl-9 text-sm  outline-2 placeholder:text-gray-500"
+                className="dark:bg-dark peer block w-full rounded-md border py-2 pl-10"
+                aria-describedby="price-error"
               />
-              <IoLogoUsd className="pointer-events-none absolute left-5 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-400" />
+              <CiBadgeDollar
+                className="text-2xl absolute left-3 top-1/2 -translate-y-1/2"
+              />
             </div>
           </div>
         </div>
+        <div id="amount-price" aria-live="polite" aria-atomic="true">
+          {state.errors?.price &&
+            state.errors.price.map((error: string) => (
+              <p className="mt-2 text-sm text-red-500" key={error}>
+                {error}
+              </p>
+            ))}
+        </div>
 
+        {/* Product Stock */}
         <div className="mb-4">
           <label htmlFor="stock" className="mb-2 block text-sm font-medium">
             Stock
@@ -91,25 +110,34 @@ export default function EditProductForm({
                 type="number"
                 step="0.01"
                 defaultValue={product.stock}
-                placeholder="Enter USD amount"
-                className="peer block w-full rounded-md border bg-transparent border-gray-200 py-2 pl-9 text-sm  outline-2 placeholder:text-gray-500"
+                placeholder="Enter stock amount"
+                className="dark:bg-dark peer block w-full rounded-md border py-2 pl-10"
+                aria-describedby="stock-error"
               />
+              <CiCalculator1 className="text-2xl absolute left-3 top-1/2 -translate-y-1/2" />
             </div>
           </div>
+        </div>
+        <div id="stock-error" aria-live="polite" aria-atomic="true">
+          {state.errors?.stock &&
+            state.errors.stock.map((error: string) => (
+              <p className="mt-2 text-sm text-red-500" key={error}>
+                {error}
+              </p>
+            ))}
         </div>
 
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/stock"
+          href="/dashboard/stock"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancel
         </Link>
-        <button type="submit" onClick={() => setIsLoading(!isLoading)}>
+        <button onClick={() => setIsLoading(!isLoading)}>
           {isLoading ? 'Cargando...' : 'Edit Invoice'}
         </button>
-        {/* <Button type="submit"></Button> */}
       </div>
     </form>
   );

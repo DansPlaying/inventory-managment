@@ -1,11 +1,7 @@
-import BalanceCardList from "./ui/home/balance-card-list";
-import Statistics from "./ui/home/stadistics";
+import Home from "./dashboard/page";
 
-export default function Home() {
+export default function MainPage() {
   return (
-    <div className="pt-4 w-full">
-      <BalanceCardList />
-      <Statistics/>
-    </div>
+    <Home />
   )
 }

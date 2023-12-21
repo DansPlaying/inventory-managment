@@ -23,10 +23,29 @@ export const fetchFilteredStock = async (query: string, currentPage: number) => 
         mode: 'insensitive'
       }
     },
+    include: {
+      category: true
+    },
     orderBy: {
       id: 'asc'
     },
     take: ITEMS_PER_PAGE,
-    skip: (currentPage - 1) * ITEMS_PER_PAGE
+    skip: (currentPage - 1) * ITEMS_PER_PAGE,
   })
+}
+
+export const fetchCategories = async () => {
+  return prisma.productCategory.findMany({
+    orderBy: {
+      id: 'asc'
+    },
+  })
+}
+
+export const fetchProductById = async (productId: string) => {
+  return prisma.product.findUnique({
+    where: {
+      id: parseInt(productId),
+    },
+  });
 }

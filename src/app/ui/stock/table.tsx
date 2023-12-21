@@ -29,7 +29,7 @@ export default async function StockTable({
                       {formatCurrency(product.price)}
                     </p>
                     <p>Stock {product.stock}</p>
-                    <p>Last purchase {formatDateToLocal(product.createdAt)}</p>
+                    <p>Last purchase {formatDateToLocal(product.updatedAt)}</p>
                   </div>
                   <div className="flex justify-end gap-2">
                     <UpdateProduct id={`${product.id}`} />
@@ -68,7 +68,6 @@ export default async function StockTable({
               {products?.map((product) => (
                 <tr
                   key={product.id}
-                  // className="w-full border-b py-6 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                   className="w-full border-b text-sm last-of-type:border-none"
                 >
                   {/* <td className="whitespace-nowrap py-3 pl-6 pr-3">
@@ -96,27 +95,17 @@ export default async function StockTable({
                     {product.stock}
                   </td>
                   <td className="whitespace-nowrap px-3 py-2">
-                    {formatDateToLocal(product.createdAt)}
+                    {formatDateToLocal(product.updatedAt)}
                     {/* {product.updatedAt} */}
                   </td>
                   <td className="whitespace-nowrap px-3 py-2">
-                    {product.category}
+                    {product.category?.name || null}
                   </td>
                   <td className="whitespace-nowrap px-3 py-2">
                     <div className="flex justify-end gap-3">
                       <UpdateProduct id={`${product.id}`} />
                     </div>
                   </td>
-
-                  {/* <td className="whitespace-nowrap px-3 py-3">
-                    <InvoiceStatus status={product.status} />
-                  </td>
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex justify-end gap-3">
-                      <UpdateInvoice id={product.id} />
-                      <DeleteInvoice id={product.id} />
-                    </div>
-                  </td> */}
                 </tr>
               ))}
             </tbody>

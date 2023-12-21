@@ -1,11 +1,11 @@
+import { fetchStockPages } from '@/app/lib/stock/data';
+import Search from '@/app/ui/components/search';
+import { CreateProduct } from '@/app/ui/stock/buttons';
+import Pagination from '@/app/ui/stock/pagination';
+import StockTable from '@/app/ui/stock/table';
 import { Metadata } from 'next'
 import { Suspense } from 'react';
 
-import Search from '../ui/components/search'
-import StockTable from '../ui/stock/table';
-import Pagination from '../ui/stock/pagination';
-import { fetchStockPages } from '../lib/stock/data';
-import { CreateProduct } from '../ui/stock/buttons';
 
 export const metadata: Metadata = {
   title: 'Stock',
@@ -23,7 +23,7 @@ export default async function Page({
   const totalPages = await fetchStockPages(query)
 
   return (
-    <section className='flex flex-col items-center py-6 px-6 gap-4'>
+    <main className='flex flex-col items-center py-6 px-6 gap-4'>
       <div className='flex flex-col items-center gap-4 w-full'>
         <h3 className='text-3xl'>In Stock</h3>
         <hr className='w-full' />
@@ -42,6 +42,6 @@ export default async function Page({
       <div>
         <Pagination totalPages={totalPages} />
       </div>
-    </section>
+    </main>
   )
 }
