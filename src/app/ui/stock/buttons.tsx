@@ -6,7 +6,7 @@ export function CreateProduct() {
     <Link
       href="/dashboard/stock/create"
       className="
-      fixed bottom-6 right-6 md:static
+      fixed bottom-4 right-4 md:static
       flex
       gap-2
       bg-accentPrimary

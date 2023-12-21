@@ -19,11 +19,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} h-screen p-4 bg-light flex dark:bg-black text-black  dark:text-primary`}>
-        <div className='bg-gray-300 dark:bg-dark rounded-3xl h-full w-full md:overflow-hidden relative'>
-          <div className='border rounded absolute blur-3xl w-[118px] h-[102px] bg-radial-gradient-blue top-[-59px] left-[-51px]'></div>
-          <div className='border rounded absolute blur-3xl w-[118px] h-[102px] bg-radial-gradient-yellow bottom-[-59px] left-[-51px]'></div>
+    <html lang="en" className='min-h-screen'>
+      <body className={`${inter.className} min-h-screen md:p-4 bg-light flex dark:bg-black text-black  dark:text-primary`}>
+        <div className='h-auto w-full bg-gray-300 dark:bg-dark md:rounded-3xl md:overflow-hidden relative'>
+          <div className='hidden md:block border rounded absolute blur-3xl w-[118px] h-[102px] bg-radial-gradient-blue top-[-59px] left-[-51px]'></div>
+          <div className='hidden md:block border rounded absolute blur-3xl w-[118px] h-[102px] bg-radial-gradient-yellow bottom-[-59px] left-[-51px]'></div>
           <div className='grid grid-cols-main-layout h-full'>
             <SideNav />
             {children}
@@ -33,24 +33,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-// export default function RootLayout({
-//   children,
-// }: {
-//   children: React.ReactNode
-// }) {
-//   return (
-//     <html lang="en">
-//       <body className={`${inter.className}  h-full min-h-screen p-4 bg-light flex dark:bg-black text-black  dark:text-primary`}>
-//         <div className='bg-gray-300 dark:bg-dark rounded-3xl h-full w-full md:overflow-hidden relative'>
-//           <div className='border rounded absolute blur-3xl w-[118px] h-[102px] bg-radial-gradient-blue top-[-59px] left-[-51px]'></div>
-//           <div className='border rounded absolute blur-3xl w-[118px] h-[102px] bg-radial-gradient-yellow bottom-[-59px] left-[-51px]'></div>
-//           <div className='grid grid-cols-main-layout h-full'>
-//             <SideNav />
-//             {children}
-//           </div>
-//         </div>
-//       </body>
-//     </html>
-//   )
-// }
