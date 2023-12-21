@@ -1,6 +1,6 @@
 'use client'
 import { Bar } from "react-chartjs-2";
-import { Chart, registerables} from 'chart.js';
+import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
 
@@ -32,7 +32,12 @@ export default function CustomBarChart() {
 
 
 	return (
-		<div className="bg-tertiary flex px-8 py-6 rounded-lg items-center">
+		<div className="
+    relative 
+    w-[2fr] min-h-full 
+    p-6
+    flex items-center justify-center
+    bg-tertiary rounded-lg">
 			<Bar options={options} data={data} />
 		</div>
 	);
