@@ -3,9 +3,9 @@ import Statistics from "@/app/ui/home/stadistics";
 
 export default function Home() {
   return (
-    <main className="pt-4 w-full">
+    <main className="w-full pr-10">
       <BalanceCardList />
-      <Statistics/>
+      <Statistics />
     </main>
   )
 }

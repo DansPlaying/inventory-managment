@@ -27,7 +27,7 @@ const config: Config = {
         // Complex site-specific row configuration
         //'layout': '200px minmax(900px, 1fr) 100px',
         'main-layout' : '80px 1fr',
-        'statistics-layout': '65% 35%',
+        'statistics-layout': '2fr 1fr',
         'table': '10% repeat(4, minmax(0, 1fr))'
       },
       gridTemplateRows: {
