@@ -5,21 +5,26 @@ import { fetchFilteredStock } from '@/app/lib/stock/data';
 export default async function StockTable({
   query,
   currentPage,
+  pageSize,
 }: {
   query: string;
   currentPage: number;
+  pageSize: number;
 }) {
-  const products = await fetchFilteredStock(query, currentPage);
+  const products = await fetchFilteredStock(query, currentPage, pageSize);
   if (!products.length) return (<h3>No products found</h3>)
   return (
     <div className="flow-root">
       <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg md:pt-0">
+        <div
+          className="rounded-lg md:pt-0 shadow-sm p-4"
+          style={{ backgroundColor: 'var(--color-tertiary)', borderColor: 'var(--color-border)', borderWidth: '1px', borderStyle: 'solid' }}
+        >
           <div className="md:hidden">
             {products?.map((product) => (
               <div
                 key={product.id}
-                className="mb-2 w-full rounded-md p-4 border">
+                className="mb-2 w-full rounded-md p-4 border border-border bg-tertiary">
                 <div className="flex items-center gap-4 pb-4">
                   <UpdateProduct id={`${product.id}`} />
                   <h3 className="text-2xl">{product.name}</h3>
@@ -69,7 +74,7 @@ export default async function StockTable({
               {products?.map((product) => (
                 <tr
                   key={product.id}
-                  className="w-full border-b text-sm last-of-type:border-none"
+                  className="w-full border-b border-border text-sm last-of-type:border-none hover:bg-dark/50 transition-colors"
                 >
                   {/* <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">

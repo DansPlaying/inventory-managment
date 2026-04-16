@@ -3,20 +3,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CiBoxList, CiHome, CiShoppingCart } from "react-icons/ci";
 import clsx from 'clsx';
+import ThemeToggle from './theme-toggle';
 
 const links = [
   {
-    title: 'General',
+    title: 'Home',
     href: '/',
     icon: <CiHome />,
   },
   {
-    title: 'Inventario',
+    title: 'Inventory',
     href: '/dashboard/stock',
     icon: <CiBoxList />,
   },
   {
-    title: 'Crédito',
+    title: 'Credit',
     href: '/dashboard/creditControl',
     icon: <CiShoppingCart />,
   },
@@ -25,8 +26,8 @@ const links = [
 export default function SideNav() {
   const pathName = usePathname()
   return (
-    <nav className="flex items-center justify-center py-6">
-      <ul className="flex flex-col gap-11 items-center">
+    <nav className="flex flex-row md:flex-col items-center justify-between px-4 py-3 md:px-0 md:py-6 md:h-full relative z-[100]">
+      <ul className="flex flex-row md:flex-col gap-4 md:gap-11 items-center">
         {
           links.map((link) => {
             return (
@@ -44,9 +45,11 @@ export default function SideNav() {
                   }
                 >
                   {link.icon}
-                  <div className={clsx("opacity-0 invisible bg-gray-600 text-white text-sm rounded p-2 absolute top-1/2 left-full ml-2 transform -translate-y-1/2 transition-opacity duration-300 group-hover:opacity-100 group-hover:visible", {
+                  <div className={clsx("hidden md:block opacity-0 invisible text-sm rounded p-2 absolute top-1/2 left-full ml-2 transform -translate-y-1/2 transition-opacity duration-300 group-hover:opacity-100 group-hover:visible z-[999] whitespace-nowrap", {
                     "scale-75 left-2/3": pathName !== link.href
-                  })}>
+                  })}
+                  style={{ backgroundColor: 'var(--color-tertiary)', borderColor: 'var(--color-border)', borderWidth: '1px', borderStyle: 'solid', color: 'var(--color-foreground)' }}
+                  >
                     {link.title}
                   </div>
                 </Link>
@@ -54,6 +57,7 @@ export default function SideNav() {
             );
           })}
       </ul>
+      <ThemeToggle />
     </nav>
   );
 }

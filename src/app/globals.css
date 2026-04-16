@@ -2,3 +2,114 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* Light Mode - Default */
+  :root,
+  html:not(.dark) {
+    --color-primary: #1e293b;
+    --color-secondary: #475569;
+    --color-tertiary: #ffffff;
+    --color-dark: #f1f5f9;
+    --color-light: #1e293b;
+    --color-background: #e2e8f0;
+    --color-foreground: #0f172a;
+    --color-border: #cbd5e1;
+    --color-muted: #64748b;
+    --color-card: #ffffff;
+
+    --gradient-start: rgba(122, 35, 185, 0.15);
+    --gradient-end: rgba(122, 35, 185, 0);
+  }
+
+  /* Dark Mode */
+  html.dark,
+  html.dark body {
+    --color-primary: #ffffff;
+    --color-secondary: #a1a1aa;
+    --color-tertiary: #1c1c1c;
+    --color-dark: #141414;
+    --color-light: #ffffff;
+    --color-background: #0a0a0a;
+    --color-foreground: #fafafa;
+    --color-border: #333333;
+    --color-muted: #71717a;
+    --color-card: #1c1c1c;
+
+    --gradient-start: rgba(27, 175, 170, 0.8);
+    --gradient-end: rgba(27, 175, 170, 0);
+  }
+
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    overflow: hidden;
+    height: 100%;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Theme overrides - using @layer to ensure proper ordering */
+@layer components {
+  /* Light mode backgrounds */
+  [data-theme="light"] .bg-tertiary,
+  html:not(.dark) .bg-tertiary {
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  }
+
+  [data-theme="light"] .bg-dark,
+  html:not(.dark) .bg-dark {
+    --tw-bg-opacity: 1;
+    background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  }
+
+  /* Light mode text */
+  [data-theme="light"] .text-foreground,
+  html:not(.dark) .text-foreground {
+    --tw-text-opacity: 1;
+    color: rgb(15 23 42 / var(--tw-text-opacity));
+  }
+
+  [data-theme="light"] .text-secondary,
+  html:not(.dark) .text-secondary {
+    --tw-text-opacity: 1;
+    color: rgb(71 85 105 / var(--tw-text-opacity));
+  }
+
+  /* Light mode borders */
+  [data-theme="light"] .border-border,
+  html:not(.dark) .border-border {
+    --tw-border-opacity: 1;
+    border-color: rgb(203 213 225 / var(--tw-border-opacity));
+  }
+}
+
+/* Final overrides outside of layers for highest specificity */
+html:where(:not(.dark)) {
+  --color-tertiary: #ffffff;
+  --color-dark: #f1f5f9;
+  --color-background: #e2e8f0;
+  --color-foreground: #0f172a;
+  --color-secondary: #475569;
+  --color-border: #cbd5e1;
+  --color-muted: #64748b;
+}
+
+html:where(.dark) {
+  --color-tertiary: #1c1c1c;
+  --color-dark: #141414;
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
+  --color-secondary: #a1a1aa;
+  --color-border: #333333;
+  --color-muted: #71717a;
+}

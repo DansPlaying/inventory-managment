@@ -1,6 +1,8 @@
-import { fetchStockPages } from '@/app/lib/stock/data';
+import { fetchStockPages, fetchCategories, DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from '@/app/lib/stock/data';
 import Search from '@/app/ui/components/search';
 import { CreateProduct } from '@/app/ui/stock/buttons';
+import CategoryManager from '@/app/ui/stock/category-manager';
+import PageSizeSelector from '@/app/ui/stock/page-size-selector';
 import Pagination from '@/app/ui/stock/pagination';
 import StockTable from '@/app/ui/stock/table';
 import { Metadata } from 'next'
@@ -16,11 +18,18 @@ export default async function Page({
   searchParams?: {
     query?: string;
     page?: string;
+    pageSize?: string;
   };
 }) {
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
-  const totalPages = await fetchStockPages(query)
+  const requestedPageSize = Number(searchParams?.pageSize) || DEFAULT_PAGE_SIZE;
+  const pageSize = PAGE_SIZE_OPTIONS.includes(requestedPageSize) ? requestedPageSize : DEFAULT_PAGE_SIZE;
+
+  const [totalPages, categories] = await Promise.all([
+    fetchStockPages(query, pageSize),
+    fetchCategories(),
+  ]);
 
   return (
     <main className='flex flex-col items-center py-6 px-6 gap-4'>
@@ -32,14 +41,18 @@ export default async function Page({
         <div className='w-full max-w-md'>
           <Search placeholder='Quick search' />
         </div>
-        <CreateProduct />
+        <div className='flex gap-2 items-center'>
+          <CategoryManager categories={categories} />
+          <CreateProduct />
+        </div>
       </div>
       <div className='w-full'>
-        <Suspense key={query + currentPage} fallback={<h1>Cargando...</h1>}>
-          <StockTable query={query} currentPage={currentPage} />
+        <Suspense key={query + currentPage + pageSize} fallback={<h1>Loading...</h1>}>
+          <StockTable query={query} currentPage={currentPage} pageSize={pageSize} />
         </Suspense>
       </div>
-      <div>
+      <div className='flex flex-col md:flex-row items-center justify-between w-full gap-4'>
+        <PageSizeSelector currentPageSize={pageSize} />
         <Pagination totalPages={totalPages} />
       </div>
     </main>

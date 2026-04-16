@@ -19,6 +19,10 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
 
   const allPages = generatePagination(currentPage, totalPages);
 
+  if (totalPages <= 1) {
+    return null;
+  }
+
   return (
     <>
       <div className="inline-flex">
@@ -71,13 +75,13 @@ function PaginationNumber({
   isActive: boolean;
 }) {
   const className = clsx(
-    'flex h-10 w-10 items-center justify-center text-sm border',
+    'flex h-10 w-10 items-center justify-center text-sm border border-border',
     {
       'rounded-l-md': position === 'first' || position === 'single',
       'rounded-r-md': position === 'last' || position === 'single',
       'z-10 bg-accentPrimary border-accentPrimary text-white': isActive,
-      'hover:bg-gray-100': !isActive && position !== 'middle',
-      'text-gray-300': position === 'middle',
+      'hover:bg-tertiary': !isActive && position !== 'middle',
+      'text-muted': position === 'middle',
     },
   );
 
@@ -100,10 +104,10 @@ function PaginationArrow({
   isDisabled?: boolean;
 }) {
   const className = clsx(
-    'flex h-10 w-10 items-center justify-center rounded-md border',
+    'flex h-10 w-10 items-center justify-center rounded-md border border-border',
     {
-      'pointer-events-none text-gray-300': isDisabled,
-      'hover:bg-accentPrimary': !isDisabled,
+      'pointer-events-none text-muted': isDisabled,
+      'hover:bg-accentPrimary hover:text-white': !isDisabled,
       'mr-2 md:mr-4': direction === 'left',
       'ml-2 md:ml-4': direction === 'right',
     },

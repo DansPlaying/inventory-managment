@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import SideNav from '@/app/ui/components/sidenav'
+import { ThemeProvider } from '@/app/providers/theme-provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,16 +20,28 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className='min-h-screen'>
-      <body className={`${inter.className} min-h-screen md:p-4 bg-light flex dark:bg-black text-black  dark:text-primary`}>
-        <div className='h-auto w-full bg-gray-300 dark:bg-dark md:rounded-3xl md:overflow-hidden relative'>
-          <div className='hidden md:block border rounded absolute blur-3xl w-[118px] h-[102px] bg-radial-gradient-blue top-[-59px] left-[-51px]'></div>
-          <div className='hidden md:block border rounded absolute blur-3xl w-[118px] h-[102px] bg-radial-gradient-yellow bottom-[-59px] left-[-51px]'></div>
-          <div className='grid grid-cols-main-layout h-full'>
-            <SideNav />
-            {children}
+    <html lang="en" className='h-screen overflow-hidden' suppressHydrationWarning>
+      <body
+        className={`${inter.className} h-screen overflow-hidden md:p-4 flex`}
+        style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-foreground)' }}
+      >
+        <ThemeProvider>
+          <div
+            className='h-full w-full md:rounded-3xl overflow-hidden relative'
+            style={{ backgroundColor: 'var(--color-dark)' }}
+          >
+            <div className='hidden md:block border-0 rounded absolute blur-3xl w-[118px] h-[102px] top-[-59px] left-[-51px] opacity-60' style={{ background: 'radial-gradient(var(--gradient-start), var(--gradient-end))' }}></div>
+            <div className='hidden md:block border-0 rounded absolute blur-3xl w-[118px] h-[102px] bottom-[-59px] left-[-51px] opacity-60' style={{ background: 'radial-gradient(rgba(197, 138, 66, 0.6), rgba(197, 138, 66, 0))' }}></div>
+            <div className='flex flex-col md:grid md:grid-cols-main-layout h-full'>
+              <div className='relative z-[100] overflow-visible'>
+                <SideNav />
+              </div>
+              <div className='flex-1 overflow-x-hidden overflow-y-auto'>
+                {children}
+              </div>
+            </div>
           </div>
-        </div>
+        </ThemeProvider>
       </body>
     </html>
   )

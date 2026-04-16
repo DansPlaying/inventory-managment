@@ -29,7 +29,7 @@ export default function EditProductForm({
   }
   return (
     <form action={dispatch} className='w-full'>
-      <div className="rounded-md border p-4 md:p-6">
+      <div className="rounded-md border border-border bg-tertiary p-4 md:p-6 shadow-sm">
 
         {/* Product Description */}
         <div className="mb-4">
@@ -49,7 +49,7 @@ export default function EditProductForm({
               rounded-md
               py-2 pl-10
               border
-              dark:bg-dark
+              bg-tertiary border-border
               "
               aria-describedby="description-error"
             />
@@ -79,7 +79,7 @@ export default function EditProductForm({
                 step="0.01"
                 defaultValue={product.price/100}
                 placeholder="Enter USD amount"
-                className="dark:bg-dark peer block w-full rounded-md border py-2 pl-10"
+                className="bg-tertiary border-border peer block w-full rounded-md border py-2 pl-10"
                 aria-describedby="price-error"
               />
               <CiBadgeDollar
@@ -111,7 +111,7 @@ export default function EditProductForm({
                 step="0.01"
                 defaultValue={product.stock}
                 placeholder="Enter stock amount"
-                className="dark:bg-dark peer block w-full rounded-md border py-2 pl-10"
+                className="bg-tertiary border-border peer block w-full rounded-md border py-2 pl-10"
                 aria-describedby="stock-error"
               />
               <CiCalculator1 className="text-2xl absolute left-3 top-1/2 -translate-y-1/2" />
@@ -131,7 +131,7 @@ export default function EditProductForm({
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href="/dashboard/stock"
-          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+          className="flex h-10 items-center rounded-lg bg-muted/20 px-4 text-sm font-medium transition-colors hover:bg-muted/40"
         >
           Cancel
         </Link>

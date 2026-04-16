@@ -125,3 +125,110 @@ export async function updateProduct(
   revalidatePath('/dashboard/stock');
   redirect('/dashboard/stock');
 }
+
+// Category Actions
+const CategorySchema = z.object({
+  id: z.number(),
+  name: z.string({
+    invalid_type_error: 'Please enter a category name.',
+  }).min(1, {
+    message: 'Category name cannot be empty'
+  }),
+});
+
+const CreateCategory = CategorySchema.omit({ id: true });
+
+export type CategoryState = {
+  errors?: {
+    name?: string[];
+  };
+  message?: string | null;
+  success?: boolean;
+};
+
+export const createCategory = async (prevState: CategoryState, formData: FormData): Promise<CategoryState> => {
+  const validatedFields = CreateCategory.safeParse({
+    name: formData.get('name'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Category.',
+    };
+  }
+
+  const { name } = validatedFields.data;
+
+  try {
+    await prisma.productCategory.create({
+      data: { name },
+    });
+  } catch (error) {
+    return {
+      message: 'Database Error: Failed to Create Category.',
+    };
+  }
+
+  revalidatePath('/dashboard/stock');
+  return { success: true, message: 'Category created successfully!' };
+};
+
+export const updateCategory = async (
+  id: number,
+  prevState: CategoryState,
+  formData: FormData,
+): Promise<CategoryState> => {
+  const validatedFields = CreateCategory.safeParse({
+    name: formData.get('name'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Update Category.',
+    };
+  }
+
+  const { name } = validatedFields.data;
+
+  try {
+    await prisma.productCategory.update({
+      where: { id },
+      data: { name },
+    });
+  } catch (error) {
+    return {
+      message: 'Database Error: Failed to Update Category.',
+    };
+  }
+
+  revalidatePath('/dashboard/stock');
+  return { success: true, message: 'Category updated successfully!' };
+};
+
+export const deleteCategory = async (id: number): Promise<CategoryState> => {
+  try {
+    // Check if category has products
+    const productsCount = await prisma.product.count({
+      where: { productCategoryId: id },
+    });
+
+    if (productsCount > 0) {
+      return {
+        message: `Cannot delete category. It has ${productsCount} products associated.`,
+      };
+    }
+
+    await prisma.productCategory.delete({
+      where: { id },
+    });
+  } catch (error) {
+    return {
+      message: 'Database Error: Failed to Delete Category.',
+    };
+  }
+
+  revalidatePath('/dashboard/stock');
+  return { success: true, message: 'Category deleted successfully!' };
+};

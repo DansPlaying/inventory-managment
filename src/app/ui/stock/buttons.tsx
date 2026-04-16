@@ -10,9 +10,10 @@ export function CreateProduct() {
       flex
       gap-2
       bg-accentPrimary
-    text-light p-4 md:px-4 md:py-2 rounded-md font-semibold 
-      items-center 
+      text-white p-4 md:px-4 md:py-2 rounded-md font-semibold
+      items-center
       transition-colors
+      hover:bg-purple-700
      "
     >
       <span className="hidden md:block">Add Product</span>{' '}
@@ -25,7 +26,7 @@ export function UpdateProduct({ id }: { id: string }) {
   return (
     <Link
       href={`/dashboard/stock/${id}/edit`}
-      className="text-2xl rounded-md border dark:border-accentPrimary p-2 dark:hover:bg-accentPrimary"
+      className="text-2xl rounded-md border border-accentPrimary p-2 hover:bg-accentPrimary hover:text-white transition-colors"
     >
       <CiEdit />
     </Link>

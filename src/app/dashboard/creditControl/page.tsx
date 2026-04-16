@@ -10,7 +10,7 @@ const CreditControl: NextPage = () => {
       <div className=''>
 
       </div>
-      <div className='bg-tertiary w-full h-1/2 px-8 py-6 rounded-lg overflow-auto'>
+      <div className='bg-tertiary w-full h-1/2 px-8 py-6 rounded-lg overflow-auto border border-border shadow-sm'>
 
       </div>
     </main>
