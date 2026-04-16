@@ -1,6 +1,6 @@
 import { prisma } from "@/app/services/db"
-export const DEFAULT_PAGE_SIZE = 5
-export const PAGE_SIZE_OPTIONS = [5, 10, 50, 100]
+export const DEFAULT_PAGE_SIZE = 20
+export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50, 100]
 
 export const fetchStockPages = async (query: string, pageSize: number = DEFAULT_PAGE_SIZE) => {
   return Math.ceil((await prisma.product.count({

@@ -33,7 +33,6 @@ export default function SideNav() {
             return (
               <li key={link.title}>
                 <Link
-                  key={link.title}
                   href={link.href}
                   className={
                     clsx("block text-2xl p-3 rounded-lg transition-colors group relative", {

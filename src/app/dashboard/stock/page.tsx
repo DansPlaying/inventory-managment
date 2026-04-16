@@ -39,7 +39,9 @@ export default async function Page({
       </div>
       <div className='relative flex flex-col md:flex-row justify-between w-full md:items-center gap-4'>
         <div className='w-full max-w-md'>
-          <Search placeholder='Quick search' />
+          <Suspense fallback={<div className="h-10 bg-tertiary rounded-md animate-pulse" />}>
+            <Search placeholder='Quick search' />
+          </Suspense>
         </div>
         <div className='flex gap-2 items-center'>
           <CategoryManager categories={categories} />
@@ -52,8 +54,12 @@ export default async function Page({
         </Suspense>
       </div>
       <div className='flex flex-col md:flex-row items-center justify-between w-full gap-4'>
-        <PageSizeSelector currentPageSize={pageSize} />
-        <Pagination totalPages={totalPages} />
+        <Suspense fallback={<div className="h-10" />}>
+          <PageSizeSelector currentPageSize={pageSize} />
+        </Suspense>
+        <Suspense fallback={<div className="h-10" />}>
+          <Pagination totalPages={totalPages} />
+        </Suspense>
       </div>
     </main>
   )
