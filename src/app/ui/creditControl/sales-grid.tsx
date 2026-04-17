@@ -13,12 +13,18 @@ type Product = {
   category: { name: string } | null
 }
 
+type SaleItemProduct = {
+  id: number
+  name: string
+  price: number
+}
+
 type SaleItem = {
   id: number
   quantity: number
   unitPrice: number
   total: number
-  product: Product
+  product: SaleItemProduct
 }
 
 type Sale = {
