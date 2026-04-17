@@ -7,34 +7,99 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Cart {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now())
-  clientName String    @db.VarChar(255)
-  amount     Float     @default(0)
-  amountUSD  Float     @default(0)
-  amountBS   Float     @default(0)
-  amountCOP  Float     @default(0)
-  methodsUSD String[]
-  methodsBS  String[]
-  methodsCOP String[]
-  Product    Product[]
+// Client/Customer information
+model Client {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @db.VarChar(255)
+  ci        String   @unique @db.VarChar(50) // ID number
+  phone     String?  @db.VarChar(50)
+  email     String?  @db.VarChar(255)
+  address   String?  @db.VarChar(500)
+  sales     Sale[]
 }
 
+// Sale/Order - like a restaurant tab
+model Sale {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  closedAt  DateTime?  // When the sale was completed/closed
+  status    SaleStatus @default(OPEN)
+  subtotal  Float      @default(0)
+  discount  Float      @default(0)
+  tax       Float      @default(0)
+  total     Float      @default(0)
+  notes     String?    @db.VarChar(500)
+
+  // Client relationship
+  clientId  Int
+  client    Client     @relation(fields: [clientId], references: [id])
+
+  // Items and payments
+  items     SaleItem[]
+  payments  Payment[]
+}
+
+enum SaleStatus {
+  OPEN       // Tab is open, can add products
+  COMPLETED  // Sale completed and fully paid
+  CREDIT     // Sale completed but pending payment (credit)
+  CANCELLED  // Sale was cancelled
+}
+
+// Items in a sale
+model SaleItem {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  quantity  Int      @default(1)
+  unitPrice Float    // Price at time of sale
+  total     Float    // quantity * unitPrice
+
+  // Relationships
+  saleId    Int
+  sale      Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+// Payments for a sale (supports partial payments)
+model Payment {
+  id            Int           @id @default(autoincrement())
+  createdAt     DateTime      @default(now())
+  amount        Float
+  method        PaymentMethod
+  reference     String?       @db.VarChar(255) // Transaction reference
+  notes         String?       @db.VarChar(255)
+
+  // Relationship
+  saleId        Int
+  sale          Sale          @relation(fields: [saleId], references: [id], onDelete: Cascade)
+}
+
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
+  DEBIT_CARD
+  TRANSFER
+  MOBILE_PAYMENT
+  OTHER
+}
+
+// Products
 model Product {
   id                Int              @id @default(autoincrement())
   createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
   name              String           @db.VarChar(255)
   description       String?          @db.VarChar(255)
   price             Float            @default(0)
   stock             Int              @default(0)
   image             String?
-  cartId            Int?
   productCategoryId Int?
-  Cart              Cart?            @relation(fields: [cartId], references: [id])
   category          ProductCategory? @relation(fields: [productCategoryId], references: [id])
+  saleItems         SaleItem[]
 }
 
 model ProductCategory {

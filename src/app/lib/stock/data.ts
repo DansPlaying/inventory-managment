@@ -53,18 +53,21 @@ export const fetchProductById = async (productId: string) => {
 
 // Dashboard data functions
 export const fetchDashboardStats = async () => {
-  const [totalProducts, totalStock, totalCategories, totalCarts] = await Promise.all([
+  const [totalProducts, totalStock, totalCategories, totalSales] = await Promise.all([
     prisma.product.count(),
     prisma.product.aggregate({ _sum: { stock: true } }),
     prisma.productCategory.count(),
-    prisma.cart.aggregate({ _sum: { amount: true } }),
+    prisma.sale.aggregate({
+      _sum: { total: true },
+      where: { status: { in: ['COMPLETED', 'CREDIT'] } }
+    }),
   ])
 
   return {
     totalProducts,
     totalStock: totalStock._sum.stock || 0,
     totalCategories,
-    totalSales: totalCarts._sum.amount || 0,
+    totalSales: totalSales._sum.total || 0,
   }
 }
 
@@ -110,4 +113,128 @@ export const fetchTopStockProducts = async (limit = 5) => {
     },
     take: limit,
   })
+}
+
+// Credit Control data functions
+export const fetchClients = async () => {
+  return prisma.client.findMany({
+    orderBy: { name: 'asc' },
+  })
+}
+
+export const fetchClientById = async (id: number) => {
+  return prisma.client.findUnique({
+    where: { id },
+    include: {
+      sales: {
+        include: {
+          items: { include: { product: true } },
+          payments: true,
+        },
+        orderBy: { createdAt: 'desc' },
+      },
+    },
+  })
+}
+
+export const fetchOpenSales = async () => {
+  return prisma.sale.findMany({
+    where: { status: 'OPEN' },
+    include: {
+      client: true,
+      items: { include: { product: true } },
+      payments: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  })
+}
+
+export const fetchCreditSales = async () => {
+  return prisma.sale.findMany({
+    where: { status: 'CREDIT' },
+    include: {
+      client: true,
+      items: { include: { product: true } },
+      payments: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  })
+}
+
+export const fetchAllSales = async (status?: string) => {
+  return prisma.sale.findMany({
+    where: status ? { status: status as 'OPEN' | 'COMPLETED' | 'CREDIT' | 'CANCELLED' } : undefined,
+    include: {
+      client: true,
+      items: { include: { product: true } },
+      payments: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  })
+}
+
+export const fetchSaleById = async (id: number) => {
+  return prisma.sale.findUnique({
+    where: { id },
+    include: {
+      client: true,
+      items: { include: { product: true } },
+      payments: true,
+    },
+  })
+}
+
+export const fetchProductsForSale = async () => {
+  return prisma.product.findMany({
+    where: { stock: { gt: 0 } },
+    include: { category: true },
+    orderBy: { name: 'asc' },
+  })
+}
+
+export const fetchCompletedSales = async (
+  page: number = 1,
+  pageSize: number = 10,
+  startDate?: string,
+  endDate?: string
+) => {
+  const skip = (page - 1) * pageSize
+
+  const dateFilter: { closedAt?: { gte?: Date; lte?: Date } } = {}
+  if (startDate || endDate) {
+    dateFilter.closedAt = {}
+    if (startDate) {
+      dateFilter.closedAt.gte = new Date(startDate)
+    }
+    if (endDate) {
+      const end = new Date(endDate)
+      end.setHours(23, 59, 59, 999)
+      dateFilter.closedAt.lte = end
+    }
+  }
+
+  const [sales, total] = await Promise.all([
+    prisma.sale.findMany({
+      where: {
+        status: 'COMPLETED',
+        ...dateFilter,
+      },
+      include: {
+        client: true,
+        items: { include: { product: true } },
+        payments: true,
+      },
+      orderBy: { closedAt: 'desc' },
+      skip,
+      take: pageSize,
+    }),
+    prisma.sale.count({
+      where: {
+        status: 'COMPLETED',
+        ...dateFilter,
+      },
+    }),
+  ])
+
+  return { sales, total, totalPages: Math.ceil(total / pageSize) }
 }

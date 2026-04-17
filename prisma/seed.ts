@@ -1,12 +1,15 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, SaleStatus, PaymentMethod } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 async function main() {
   // Clear existing data
+  await prisma.payment.deleteMany()
+  await prisma.saleItem.deleteMany()
+  await prisma.sale.deleteMany()
+  await prisma.client.deleteMany()
   await prisma.product.deleteMany()
   await prisma.productCategory.deleteMany()
-  await prisma.cart.deleteMany()
 
   // Create categories
   const categories = await Promise.all([
@@ -55,7 +58,7 @@ async function main() {
     { name: 'Champion Reverse Weave Hoodie', description: 'Gray, cotton blend', price: 65, stock: 110 },
     { name: 'Dr. Martens 1460 Boots', description: 'Classic 8-eye boots, black', price: 180, stock: 42 },
     { name: 'Carhartt WIP Beanie', description: 'Acrylic watch hat', price: 25, stock: 200 },
-    { name: 'Arc\'teryx Beta AR Jacket', description: 'Gore-Tex waterproof', price: 599, stock: 18 },
+    { name: "Arc'teryx Beta AR Jacket", description: 'Gore-Tex waterproof', price: 599, stock: 18 },
     { name: 'Uniqlo Ultra Light Down', description: 'Packable jacket', price: 79, stock: 95 },
     { name: 'Vans Old Skool', description: 'Classic skate shoe, black/white', price: 70, stock: 130 },
     { name: 'Columbia Fleece Vest', description: 'Lightweight, charcoal', price: 55, stock: 78 },
@@ -111,7 +114,7 @@ async function main() {
     { name: 'Hobonichi Techo Planner', description: 'A6, Japanese daily planner', price: 42, stock: 55 },
     { name: 'Copic Sketch Markers', description: '12-piece basic set', price: 78, stock: 38 },
     { name: 'Faber-Castell Polychromos', description: '24 color pencils', price: 52, stock: 48 },
-    { name: 'Midori Traveler\'s Notebook', description: 'Regular size, camel leather', price: 65, stock: 32 },
+    { name: "Midori Traveler's Notebook", description: 'Regular size, camel leather', price: 65, stock: 32 },
     { name: 'Baron Fig Confidant', description: 'Hardcover notebook, charcoal', price: 22, stock: 88 },
   ]
 
@@ -128,7 +131,7 @@ async function main() {
     { name: 'Protein Powder Whey', description: 'Optimum Nutrition, 5lbs', price: 62, stock: 48 },
     { name: 'Green Tea Variety Pack', description: 'Tazo, 40 tea bags', price: 12, stock: 155 },
     { name: 'Maple Syrup Grade A', description: 'Vermont pure, 32oz', price: 28, stock: 62 },
-    { name: 'Quinoa Organic', description: 'Bob\'s Red Mill, 26oz', price: 9, stock: 195 },
+    { name: 'Quinoa Organic', description: "Bob's Red Mill, 26oz", price: 9, stock: 195 },
     { name: 'Dark Chocolate Bar 85%', description: 'Lindt Excellence, 3.5oz', price: 5, stock: 220 },
     { name: 'Avocado Oil Spray', description: 'Chosen Foods, 13.5oz', price: 11, stock: 135 },
   ]
@@ -148,7 +151,7 @@ async function main() {
     { name: 'Drunk Elephant C-Firma', description: 'Vitamin C serum, 1oz', price: 80, stock: 32 },
     { name: 'Waterpik Water Flosser', description: 'Aquarius Professional', price: 79, stock: 45 },
     { name: 'First Aid Beauty Cream', description: 'Ultra repair, 6oz', price: 38, stock: 68 },
-    { name: 'Paula\'s Choice BHA Exfoliant', description: '2% salicylic acid, 4oz', price: 34, stock: 82 },
+    { name: "Paula's Choice BHA Exfoliant", description: '2% salicylic acid, 4oz', price: 34, stock: 82 },
   ]
 
   const toysProducts = [
@@ -183,7 +186,7 @@ async function main() {
     { name: 'Car Phone Mount', description: 'iOttie Easy One Touch', price: 25, stock: 145 },
     { name: 'Tire Pressure Gauge', description: 'AstroAI digital, backlit', price: 14, stock: 185 },
     { name: 'Portable Air Compressor', description: 'EPAuto 12V DC inflator', price: 35, stock: 75 },
-    { name: 'Car Wax Meguiar\'s Gold', description: 'Premium paste, 11oz', price: 22, stock: 95 },
+    { name: "Car Wax Meguiar's Gold", description: 'Premium paste, 11oz', price: 22, stock: 95 },
     { name: 'Sunshade Windshield', description: 'EcoNour, universal fit', price: 18, stock: 125 },
   ]
 
@@ -232,7 +235,6 @@ async function main() {
         data: {
           ...product,
           createdAt: getRandomDate(),
-          updatedAt: getRandomDate(),
         },
       })
     )
@@ -240,48 +242,112 @@ async function main() {
 
   console.log('Created products:', products.length)
 
-  // Create clients/carts
-  const clients = [
-    { clientName: 'John Smith', amount: 2348, amountUSD: 2348, methodsUSD: ['Credit Card'] },
-    { clientName: 'Emily Johnson', amount: 1198, amountUSD: 1198, methodsUSD: ['PayPal'] },
-    { clientName: 'Michael Brown', amount: 856, amountUSD: 856, methodsUSD: ['Debit Card'] },
-    { clientName: 'Sarah Davis', amount: 3250, amountUSD: 3250, methodsUSD: ['Credit Card'] },
-    { clientName: 'David Wilson', amount: 467, amountUSD: 467, methodsUSD: ['Apple Pay'] },
-    { clientName: 'Jessica Martinez', amount: 1875, amountUSD: 1875, methodsUSD: ['Credit Card'] },
-    { clientName: 'Christopher Taylor', amount: 2100, amountUSD: 2100, methodsUSD: ['PayPal'] },
-    { clientName: 'Amanda Anderson', amount: 945, amountUSD: 945, methodsUSD: ['Debit Card'] },
-    { clientName: 'Matthew Thomas', amount: 1560, amountUSD: 1560, methodsUSD: ['Credit Card'] },
-    { clientName: 'Ashley Jackson', amount: 728, amountUSD: 728, methodsUSD: ['Google Pay'] },
-    { clientName: 'Daniel White', amount: 4200, amountUSD: 4200, methodsUSD: ['Wire Transfer'] },
-    { clientName: 'Jennifer Harris', amount: 1345, amountUSD: 1345, methodsUSD: ['Credit Card'] },
-    { clientName: 'James Clark', amount: 890, amountUSD: 890, methodsUSD: ['PayPal'] },
-    { clientName: 'Elizabeth Lewis', amount: 2650, amountUSD: 2650, methodsUSD: ['Credit Card'] },
-    { clientName: 'Robert Robinson', amount: 1120, amountUSD: 1120, methodsUSD: ['Debit Card'] },
-    { clientName: 'Michelle Walker', amount: 3800, amountUSD: 3800, methodsUSD: ['Credit Card'] },
-    { clientName: 'William Hall', amount: 567, amountUSD: 567, methodsUSD: ['Apple Pay'] },
-    { clientName: 'Stephanie Allen', amount: 2890, amountUSD: 2890, methodsUSD: ['PayPal'] },
-    { clientName: 'Joseph Young', amount: 1450, amountUSD: 1450, methodsUSD: ['Credit Card'] },
-    { clientName: 'Nicole King', amount: 985, amountUSD: 985, methodsUSD: ['Debit Card'] },
+  // Create clients
+  const clientsData = [
+    { name: 'John Smith', ci: 'V-12345678', phone: '+1-555-0101', email: 'john.smith@email.com' },
+    { name: 'Emily Johnson', ci: 'V-23456789', phone: '+1-555-0102', email: 'emily.j@email.com' },
+    { name: 'Michael Brown', ci: 'V-34567890', phone: '+1-555-0103', email: 'michael.b@email.com' },
+    { name: 'Sarah Davis', ci: 'V-45678901', phone: '+1-555-0104', email: 'sarah.d@email.com' },
+    { name: 'David Wilson', ci: 'V-56789012', phone: '+1-555-0105', email: 'david.w@email.com' },
+    { name: 'Jessica Martinez', ci: 'V-67890123', phone: '+1-555-0106', email: 'jessica.m@email.com' },
+    { name: 'Christopher Taylor', ci: 'V-78901234', phone: '+1-555-0107', email: 'chris.t@email.com' },
+    { name: 'Amanda Anderson', ci: 'V-89012345', phone: '+1-555-0108', email: 'amanda.a@email.com' },
+    { name: 'Matthew Thomas', ci: 'V-90123456', phone: '+1-555-0109', email: 'matt.t@email.com' },
+    { name: 'Ashley Jackson', ci: 'V-01234567', phone: '+1-555-0110', email: 'ashley.j@email.com' },
+    { name: 'Daniel White', ci: 'E-11111111', phone: '+1-555-0111', email: 'daniel.w@email.com' },
+    { name: 'Jennifer Harris', ci: 'E-22222222', phone: '+1-555-0112', email: 'jennifer.h@email.com' },
+    { name: 'James Clark', ci: 'E-33333333', phone: '+1-555-0113', email: 'james.c@email.com' },
+    { name: 'Elizabeth Lewis', ci: 'E-44444444', phone: '+1-555-0114', email: 'elizabeth.l@email.com' },
+    { name: 'Robert Robinson', ci: 'E-55555555', phone: '+1-555-0115', email: 'robert.r@email.com' },
   ]
 
-  const carts = await Promise.all(
-    clients.map(client =>
-      prisma.cart.create({
-        data: {
-          clientName: client.clientName,
-          amount: client.amount,
-          amountUSD: client.amountUSD,
-          amountBS: 0,
-          amountCOP: 0,
-          methodsUSD: client.methodsUSD,
-          methodsBS: [],
-          methodsCOP: [],
-        },
-      })
-    )
+  const clients = await Promise.all(
+    clientsData.map(client => prisma.client.create({ data: client }))
   )
 
-  console.log('Created clients/carts:', carts.length)
+  console.log('Created clients:', clients.length)
+
+  // Create some sales with different statuses
+  // Completed sales
+  for (let i = 0; i < 5; i++) {
+    const client = clients[i]
+    const saleProducts = products.slice(i * 3, i * 3 + 3)
+    const items = saleProducts.map((p, idx) => ({
+      productId: p.id,
+      quantity: idx + 1,
+      unitPrice: p.price,
+      total: p.price * (idx + 1),
+    }))
+    const subtotal = items.reduce((sum, item) => sum + item.total, 0)
+
+    await prisma.sale.create({
+      data: {
+        clientId: client.id,
+        status: SaleStatus.COMPLETED,
+        subtotal,
+        total: subtotal,
+        closedAt: getRandomDate(),
+        items: { create: items },
+        payments: {
+          create: {
+            amount: subtotal,
+            method: PaymentMethod.CREDIT_CARD,
+            reference: `TXN-${1000 + i}`,
+          },
+        },
+      },
+    })
+  }
+
+  // Credit sales (pending payment)
+  for (let i = 5; i < 8; i++) {
+    const client = clients[i]
+    const saleProducts = products.slice(i * 2, i * 2 + 2)
+    const items = saleProducts.map((p) => ({
+      productId: p.id,
+      quantity: 1,
+      unitPrice: p.price,
+      total: p.price,
+    }))
+    const subtotal = items.reduce((sum, item) => sum + item.total, 0)
+
+    await prisma.sale.create({
+      data: {
+        clientId: client.id,
+        status: SaleStatus.CREDIT,
+        subtotal,
+        total: subtotal,
+        closedAt: getRandomDate(),
+        notes: 'Pending payment - credit sale',
+        items: { create: items },
+      },
+    })
+  }
+
+  // Open sales (tabs still open)
+  for (let i = 8; i < 12; i++) {
+    const client = clients[i]
+    const saleProducts = products.slice(i * 2 + 10, i * 2 + 12)
+    const items = saleProducts.map((p, idx) => ({
+      productId: p.id,
+      quantity: idx + 1,
+      unitPrice: p.price,
+      total: p.price * (idx + 1),
+    }))
+    const subtotal = items.reduce((sum, item) => sum + item.total, 0)
+
+    await prisma.sale.create({
+      data: {
+        clientId: client.id,
+        status: SaleStatus.OPEN,
+        subtotal,
+        total: subtotal,
+        items: { create: items },
+      },
+    })
+  }
+
+  console.log('Created sales with various statuses')
   console.log('Seed completed successfully!')
 }
 
